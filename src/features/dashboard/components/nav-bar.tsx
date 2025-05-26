@@ -62,10 +62,10 @@ export const NavBar = () => {
                     <DropdownMenuContent sideOffset={10}>
                         <DropdownMenuLabel>My Account</DropdownMenuLabel>
                         <DropdownMenuSeparator/>
-                        <DropdownMenuItem>
-                            <User className="h-[1.2rem] w-[1.2rem] mr-2"/>
-                            Profile
-                        </DropdownMenuItem>
+                        {/*<DropdownMenuItem>*/}
+                        {/*    <User className="h-[1.2rem] w-[1.2rem] mr-2"/>*/}
+                        {/*    Profile*/}
+                        {/*</DropdownMenuItem>*/}
                         <DropdownMenuItem>
                             <LogOut className="h-[1.2rem] w-[1.2rem] mr-2"/>
                             Logout
