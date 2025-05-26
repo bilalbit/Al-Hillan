@@ -1,11 +1,11 @@
 import React from 'react';
+
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from '@/components/ui/card';
-import {Edit} from 'lucide-react';
-import {Button} from '@/components/ui/button';
-import {cn} from "@/lib/utils";
-import Link from 'next/link';
 import {DeletePackageDialog} from "@/features/packages/components/delete-package-dialog";
-import {PackagesType} from "@/features/packages/types";
+import {AddOrEditPackageDialog} from "@/features/packages/components/add-or-edit-package-dialog";
+
+import {cn} from "@/lib/utils";
+import {PackagesType} from "@/features/packages/schemas";
 
 export const PackageCard = ({packs, className = ""}: { packs: PackagesType, className?: string }) => {
 
@@ -40,11 +40,7 @@ export const PackageCard = ({packs, className = ""}: { packs: PackagesType, clas
                 </div>
             </CardContent>
             <CardFooter>
-                <Link href={`/dashboard/packages/${packs.id}`} className='w-full'>
-                    <Button className="w-full">
-                        <Edit/> Edit Package
-                    </Button>
-                </Link>
+                <AddOrEditPackageDialog defaultValues={packs} form_type='edit'/>
             </CardFooter>
         </Card>
 

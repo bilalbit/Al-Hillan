@@ -1,13 +1,11 @@
 import React from 'react';
 import {PackagesList} from "@/features/packages/components/packages-list";
-import {Plus} from "lucide-react";
-import {Button} from "@/components/ui/button";
-import {AddPackageDialog} from "@/features/packages/components/add-package-dialog";
+import {AddOrEditPackageDialog} from "@/features/packages/components/add-or-edit-package-dialog";
 
 const PackagesPage = () => {
     return (
         <>
-           <AddPackageDialog />
+           <AddOrEditPackageDialog form_type="add" />
             <PackagesList/>
         </>
     )
