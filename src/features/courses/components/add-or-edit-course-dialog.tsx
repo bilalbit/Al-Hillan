@@ -14,37 +14,31 @@ import {
 import {Edit, Plus} from "lucide-react";
 
 import {useAppForm} from "@/components/form-ui";
-import {PackageSchema, PackagesType} from "@/features/packages/schemas";
 
-// GET COURSE NAME FROM DATABASE
-const getCourseName = () => {
-    return [
-        {value: "0d854f16-bad4-46ff-a406-62ce89774910", label: "Course 1"},
-        {value: "0d854f16-bad4-46ff-a406-62ce89774920", label: "Course 2"},
-        {value: "0d854f16-bad4-46ff-a406-62ce89774930", label: "Course 3"},
-        {value: "0d854f16-bad4-46ff-a406-62ce89774940", label: "Course 4"},
-        {value: "0d854f16-bad4-46ff-a406-62ce89774950", label: "Course 5"},
-        {value: "0d854f16-bad4-46ff-a406-62ce89774960", label: "Course 6"}
-    ]
-}
-type AddPackageDialogType = {
+import { CourseType ,CourseSchema} from "@/features/courses/schemas";
+
+
+type AddOrEditCourseDialogType = {
     form_type: "add" | "edit"
-    defaultValues?: PackagesType
+    defaultValues?: CourseType
 }
-export const AddOrEditPackageDialog = ({
+export const AddOrEditCourseDialog = ({
                                            form_type,
                                            defaultValues = {
                                                id: "",
-                                               course_type: "",
-                                               year_price: 1,
-                                               half_year_price: 1,
-                                               month_price: 1,
+                                               title: "",
+                                               category: "beginner",
+                                               youtube_url: "",
+                                               duration: "",
+                                               students: 0,
+                                               startDate: "",
+                                               description: "",
                                            }
-                                       }: AddPackageDialogType) => {
+                                       }: AddOrEditCourseDialogType) => {
     const form = useAppForm({
         defaultValues: defaultValues,
         validators: {
-            onChangeAsync: PackageSchema,
+            onChangeAsync: CourseSchema,
             onBlurAsyncDebounceMs: 600
         },
         onSubmit: ({value}) => {
@@ -54,16 +48,15 @@ export const AddOrEditPackageDialog = ({
     return (
         <Dialog>
             <DialogTrigger asChild>
-                {/*<Button variant="outline">Add Package</Button>*/}
                 {
                     form_type === "edit" ? (
                         <Button className="w-full">
-                            <Edit/> Edit Package
+                            <Edit/> Edit Course
                         </Button>
                     ) : (
                         <div className='flex justify-end'>
                             <Button>
-                                <Plus/> Add Packages
+                                <Plus/> Add Course
                             </Button>
                         </div>
                     )
@@ -72,34 +65,43 @@ export const AddOrEditPackageDialog = ({
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
                     <DialogTitle>{
-                        form_type === "add" ? "Add Package" : "Edit Package"
+                        form_type === "add" ? "Add Course" : "Edit Course"
                     }</DialogTitle>
                     <DialogDescription>
                         {
-                            form_type === "add" ? "Add New Packages. Click Add When You're Done" : "Edit Selected Package. Click On Edit When You're Done."
+                            form_type === "add" ? "Add New Course. Click Add When You're Done" : "Edit Selected Course. Click On Edit When You're Done."
                         }
                     </DialogDescription>
                 </DialogHeader>
                 <form className="grid gap-4 py-4">
-                    <form.AppField name='course_type'>
+                    <form.AppField name="title">
+                        {(field) => <field.TextField label="Year Price"/>}
+                    </form.AppField>
+                    <form.AppField name='category'>
                         {
                             (field) => (
                                 <field.SelectField
                                     label="Course type"
-                                    options={getCourseName()}
+                                    options={[
+                                        {
+                                            value: "beginner",
+                                            label: "beginner"
+                                        }
+                                    ]}
                                     placeholder="Course Type"
                                 />
                             )
                         }
                     </form.AppField>
-                    <form.AppField name="year_price">
-                        {(field) => <field.NumberField type="number" min={1} label="Year Price"/>}
+
+                    <form.AppField name="youtube_url">
+                        {(field) => <field.TextField label="Half Year Price"/>}
                     </form.AppField>
-                    <form.AppField name="half_year_price">
-                        {(field) => <field.NumberField type="number" min={1} label="Half Year Price"/>}
+                    <form.AppField name="duration">
+                        {(field) => <field.NumberField min={1} label="Monthly Price"/>}
                     </form.AppField>
-                    <form.AppField name="month_price">
-                        {(field) => <field.NumberField type="number" min={1} label="Monthly Price"/>}
+                    <form.AppField name="students">
+                        {(field) => <field.NumberField min={1} label="Monthly Price"/>}
                     </form.AppField>
                 </form>
                 {

@@ -1,17 +1,17 @@
 import React from 'react';
 
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from '@/components/ui/card';
-import {DeletePackageDialog} from "@/features/packages/components/delete-package-dialog";
 import {AddOrEditPackageDialog} from "@/features/packages/components/add-or-edit-package-dialog";
 
 import {cn} from "@/lib/utils";
 import {PackagesType} from "@/features/packages/schemas";
+import {DeleteDialog} from "@/components/ui+/delete-Dialog";
 
 export const PackageCard = ({packs, className = ""}: { packs: PackagesType, className?: string }) => {
 
     return (
         <Card className={cn("w-[380px] relative", className)}>
-            <DeletePackageDialog />
+            <DeleteDialog name={"ለቃዒዳ"} label="package"/>
             <CardHeader>
                 <CardTitle>አሰላሙዐለይኩም ወራህመቱሏሂ ወበረካቱሁ</CardTitle>
                 <CardDescription>የምንሰጣቸው አስተምህሮቶች እና ዋጋ.</CardDescription>
@@ -24,7 +24,9 @@ export const PackageCard = ({packs, className = ""}: { packs: PackagesType, clas
                         <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500"/>
                         <div className="space-y-3">
                             <p className="font-bold leading-none">
-                                ለ{packs.course_type}
+                                {/*GET COURSE NAME*/}
+                                ለ ለቃዒዳ
+                                {/*ለ{packs.course_type}*/}
                             </p>
                             <p className="text-sm text-muted-foreground">
                                 የ 1 ዓመት ፓኬጅ በ <b>{packs.year_price}</b> ብር

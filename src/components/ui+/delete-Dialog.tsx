@@ -10,7 +10,12 @@ import {
 import {Button} from "@/components/ui/button";
 import {Trash2} from "lucide-react";
 
-export const DeletePackageDialog = () => {
+type DeleteDialogType = {
+    name: string;
+    label: string;
+}
+
+export const DeleteDialog = ({name,label}:DeleteDialogType) => {
     return (
         <Dialog>
             <DialogTrigger>
@@ -20,10 +25,10 @@ export const DeletePackageDialog = () => {
             </DialogTrigger>
             <DialogContent>
                 <DialogHeader>
-                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                    <DialogTitle>Delete {name} {label} ?</DialogTitle>
                     <DialogDescription>
                         This action cannot be undone.
-                        This will permanently delete the package
+                        This will permanently delete the {label}
                     </DialogDescription>
                 </DialogHeader>
                 <DialogFooter className="sm:justify-end">

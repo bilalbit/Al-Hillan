@@ -8,6 +8,7 @@ import {SubmitButton} from "./submit-button";
 import {TextFieldWithLoader} from "./text-field-with-loader";
 import {ResetButton} from "./reset-button";
 import {DatePicker} from "./date-picker-field";
+import {NumberField} from "@/components/form-ui/number-field";
 
 // export useFieldContext for use in your custom components
 export const {fieldContext, formContext, useFieldContext, useFormContext } = createFormHookContexts()
@@ -19,6 +20,7 @@ export const { useAppForm } = createFormHook({
         SelectField,
         TextFieldWithLoader,
         DatePicker,
+        NumberField
     },
     formComponents: {
         SubmitButton,
