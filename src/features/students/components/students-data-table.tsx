@@ -1,95 +1,162 @@
-'use client';
-import React from 'react';
+"use client"
+
+import React from "react";
+
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
+    ColumnDef,
+    ColumnFiltersState,
+    flexRender,
+    getCoreRowModel,
+    getFilteredRowModel,
+    getPaginationRowModel,
+    getSortedRowModel,
+    SortingState,
+    useReactTable,
+} from "@tanstack/react-table"
+import {Table, TableBody, TableCell, TableHead, TableHeader, TableRow,} from "@/components/ui/table"
+import {DataTablePagination} from "@/components/ui+/table-pagination";
+import {DataTableViewOptions} from "@/components/ui+/data-table-view-options";
+import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
-import {MoreVertical} from "lucide-react";
-import {useToast} from "@/hooks/use-toast";
-import Link from 'next/link';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from "@/components/ui/dialog";
-import { Student } from '@/app/dashboard/students/columns';
+import {exportTableToCSV} from "@/lib/export";
+import {Download, Plus} from "lucide-react";
+import {ReloadIcon} from "@/components/ui+/reload-icon";
+import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
+import GDialog from "@/components/custome-component/g-dialog";
+import {AddOrEditStudentForm} from "@/features/students/components/add-or-edit-student-form";
 
-export const StudentTableActions = ({student}: { student: Student }) => {
+
+type DataTableProps<TData, TValue> = {
+    columns: ColumnDef<TData, TValue>[]
+    data: TData[]
+}
+
+export const StudentsDataTable = <TData, TValue>({
+                                                     columns,
+                                                     data,
+                                                 }: DataTableProps<TData, TValue>) => {
+    const [sorting, setSorting] = React.useState<SortingState>([])
+    const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
+    const [rowSelection, setRowSelection] = React.useState({})
+
+    const table = useReactTable({
+        data,
+        columns,
+        getCoreRowModel: getCoreRowModel(),
+        getPaginationRowModel: getPaginationRowModel(),
+        onSortingChange: setSorting,
+        getSortedRowModel: getSortedRowModel(),
+        onColumnFiltersChange: setColumnFilters,
+        getFilteredRowModel: getFilteredRowModel(),
+        onRowSelectionChange: setRowSelection,
+        state: {
+            sorting,
+            columnFilters,
+            rowSelection
+        },
+    })
+
     return (
-        <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-                <Button variant="ghost" className="h-8 w-8 p-0">
-                    <span className="sr-only">Open menu</span>
-                    <MoreVertical className="h-4 w-4"/>
-                </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                <DropdownMenuItem
-                >
-                    Copy Transaction ID
-                </DropdownMenuItem>
-                <DropdownMenuSeparator/>
-                {/*NOT IMPLEMENTED YET*/}
-                <DropdownMenuItem>
-                    <Link href={`/`}>
-                        View student info
-                    </Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                    <Link href={`/`}>
-                        View payment details
-                    </Link>
-                </DropdownMenuItem>
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <DropdownMenuItem onSelect={
-                            event => event.preventDefault()
-                        }>
-                            Verify Payment
-                        </DropdownMenuItem>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl min-h-screen overflow-auto">
-                        <DialogHeader>
-                            <DialogTitle>Verify Payment</DialogTitle>
-                            <DialogDescription>
-                                Verify Student Payment Detail like Date, Name and Transaction ID
-                                {/*OPEN IN NEW TAB CLICK HERE BUTTON*/}
-
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="w-full min-h-fit">
-                            {/*ADJUST THE WIDTH AND HEIGHT OF IFRAME*/}
-                            <iframe
-                                src={"payment_url"}
-                                className="w-full min-h-full border-0"
-                                allowFullScreen
-                                title="Payment Receipt"
-                            />
-                        </div>
-                        <DialogFooter>
-                            <Button
-                                variant="outline"
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    console.log("Cancelled")
-                                }}
-                            >
-                                Not Paid
+        <div className="rounded-md border space-y-6">
+            <div className="w-full flex justify-between px-4">
+                <div className="flex items-center py-4 gap-2">
+                    <Input
+                        placeholder="Search Students"
+                        value={(table.getColumn("fullName")?.getFilterValue() as string) ?? ""}
+                        onChange={(event) =>
+                            table.getColumn("fullName")?.setFilterValue(event.target.value)
+                        }
+                        className="max-w-sm"
+                    />
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            <Button variant="secondary">
+                                Search By
                             </Button>
-                            <Button>Paid</Button>
-                        </DialogFooter>
-                    </DialogContent>                </Dialog>
-            </DropdownMenuContent>
-        </DropdownMenu>
-    );
-};
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem>Name</DropdownMenuItem>
+                            <DropdownMenuItem>Phone Number</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+
+                    <ReloadIcon/>
+                </div>
+                <div className="flex justify-between items-center gap-2">
+                    {/*<Button variant="outline" size="sm">*/}
+                    {/*    <Plus/>*/}
+                    {/*    Add Student*/}
+                    {/*</Button>*/}
+                    <GDialog triggerChild={
+                        <Button variant="outline" size="sm">
+                            <Plus/>
+                            Add Student
+                        </Button>
+                    }>
+                        <AddOrEditStudentForm form_type="add"/>
+                    </GDialog>
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                            exportTableToCSV(table, {
+                                // Students/DAY/MONTH/DATE
+                                filename: `Students/`,
+                                excludeColumns: ["select", "actions"],
+                            })
+                        }
+                    >
+                        <Download/>
+                        Export
+                    </Button>
+                    <DataTableViewOptions table={table}/>
+                </div>
+            </div>
+
+            <Table>
+                <TableHeader>
+                    {table.getHeaderGroups().map((headerGroup) => (
+                        <TableRow key={headerGroup.id}>
+                            {headerGroup.headers.map((header) => {
+                                return (
+                                    <TableHead key={header.id}>
+                                        {header.isPlaceholder
+                                            ? null
+                                            : flexRender(
+                                                header.column.columnDef.header,
+                                                header.getContext()
+                                            )}
+                                    </TableHead>
+                                )
+                            })}
+                        </TableRow>
+                    ))}
+                </TableHeader>
+                <TableBody>
+                    {table.getRowModel().rows?.length ? (
+                        table.getRowModel().rows.map((row) => (
+                            <TableRow
+                                key={row.id}
+                                data-state={row.getIsSelected() && "selected"}
+                            >
+                                {row.getVisibleCells().map((cell) => (
+                                    <TableCell key={cell.id}>
+                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                    </TableCell>
+                                ))}
+                            </TableRow>
+                        ))
+                    ) : (
+                        <TableRow>
+                            <TableCell colSpan={columns.length} className="h-24 text-center">
+                                No results.
+                            </TableCell>
+                        </TableRow>
+                    )}
+                </TableBody>
+            </Table>
+            <DataTablePagination table={table}/>
+
+        </div>
+    )
+}

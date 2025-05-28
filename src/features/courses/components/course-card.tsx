@@ -4,20 +4,14 @@ import {DeleteDialog} from "@/components/ui+/delete-Dialog";
 import {AddOrEditCourseDialog} from "@/features/courses/components/add-or-edit-course-dialog";
 import {Button} from "@/components/ui/button";
 import {Eye} from "lucide-react";
+import {CourseType} from "@/features/courses/schemas";
+import Image from "next/image";
+import {getImageUrl} from "@/lib/youtube";
 
-
-const course = {
-    id: 4,
-    title: "ተፍሲር (የቁርአን ትርጓሜ)",
-    category: "advanced",
-    image: "https://images.pexels.com/photos/6103192/pexels-photo-6103192.jpeg",
-    duration: "24 ሳምንታት",
-    students: 45,
-    startDate: "በየስድስት ወሩ ምዝገባ",
-    description: "የቁርአን ጥልቅ ትርጓሜና ትምህርቶችን በዝርዝር የሚያስተምር ከፍተኛ ደረጃ ኮርስ።",
-}
-
-export const CourseCard = () => {
+// startDate: "በየስድስት ወሩ ምዝገባ",
+// duration: "24 ሳምንታት",
+export const CourseCard = ({data}: { data: CourseType }) => {
+    const image_url = getImageUrl(data.youtube_url);
     return (
         <Card className="relative">
             <DeleteDialog name="የተጅዊድ ህግጋት" label="Course"/>
@@ -29,9 +23,11 @@ export const CourseCard = () => {
                         className="w-full h-48 p-0 overflow-hidden rounded-t-lg"
                         // onClick={() => console.log(`View course ${course.id}`)} // Replace with your view logic
                     >
-                        <img
-                            src={course.image}
-                            alt={course.title}
+                        <Image
+                            src={image_url}
+                            width={500}
+                            height={300}
+                            alt={data.title}
                             className="w-full h-full object-cover"
                         />
                         <div
@@ -40,27 +36,27 @@ export const CourseCard = () => {
                         </div>
                     </Button>
                 </div>
-                <CardTitle className="mt-2">{course.title}</CardTitle>
-                <CardDescription>{course.description}</CardDescription>
+                <CardTitle className="mt-2">{data.title}</CardTitle>
+                <CardDescription>{data.description}</CardDescription>
             </CardHeader>
             <CardContent className="grid gap-4">
                 <div className="space-y-2">
                     <p className="text-sm font-medium">
-                        <span className="font-bold">መደብ:</span> {course.category}
+                        <span className="font-bold">መደብ:</span> {data.category}
                     </p>
                     <p className="text-sm font-medium">
-                        <span className="font-bold">ቆይታ:</span> {course.duration}
+                        <span className="font-bold">ቆይታ:</span> {data.duration?.toDateString()}
                     </p>
                     <p className="text-sm font-medium">
-                        <span className="font-bold">ተማሪዎች:</span> {course.students}
+                        <span className="font-bold">ተማሪዎች:</span> {data.num_of_students}
                     </p>
                     <p className="text-sm font-medium">
-                        <span className="font-bold">መጀመሪያ ቀን:</span> {course.startDate}
+                        <span className="font-bold">መጀመሪያ ቀን:</span> {data.startDate?.toDateString()}
                     </p>
                 </div>
             </CardContent>
             <CardFooter>
-                <AddOrEditCourseDialog form_type="edit"/>
+                <AddOrEditCourseDialog defaultValues={data} form_type="edit"/>
             </CardFooter>
         </Card>
     );

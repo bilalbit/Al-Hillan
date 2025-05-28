@@ -13,6 +13,7 @@ export type Payment = {
     status: "verified" | "un-verified"
     payment_method: "telebirr" | "cbe"
     transaction_id: string
+    package_id: string
     date: string
     student: {
         id: string

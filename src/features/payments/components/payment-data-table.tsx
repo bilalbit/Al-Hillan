@@ -17,6 +17,9 @@ import React from "react";
 import {DataTablePagination} from "@/components/ui+/table-pagination";
 import {DataTableViewOptions} from "@/components/ui+/data-table-view-options";
 import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
+import {exportTableToCSV} from "@/lib/export";
+import {Download} from "lucide-react";
 
 
 type DataTableProps<TData, TValue> = {
@@ -63,7 +66,23 @@ export const PaymentDataTable = <TData, TValue>({
                         className="max-w-sm"
                     />
                 </div>
-                <DataTableViewOptions table={table}/>
+                <div className="flex justify-between gap-2 mt-4">
+                    <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                            exportTableToCSV(table, {
+                                // Students/DAY/MONTH/DATE
+                                filename: `Students/`,
+                                excludeColumns: ["select", "actions"],
+                            })
+                        }
+                    >
+                        <Download />
+                        Export
+                    </Button>
+                    <DataTableViewOptions table={table}/>
+                </div>
             </div>
 
             <Table>

@@ -3,35 +3,23 @@
 import {ColumnDef} from "@tanstack/react-table"
 import {cn} from "@/lib/utils";
 import {DataTableColumnHeader} from "@/components/ui+/data-table-column-header";
-import {PaymentTableActions} from "@/features/payments/components/payment-table-actions";
-import {StudentTableActions} from "@/features/students/components/students-data-table";
+import {StudentType} from "@/features/students/schemas";
+import {StudentTableActions} from "@/features/students/components/student-table-actions";
 
-// This type is used to define the shape of our data.
-// You can use a Zod schema here if you want.
-export type Student = {
-    id: string
-    first_name: string
-    middle_name: string
-    last_name?: string
-    phone: string
-    account_number: string
-    date_of_birth: string
-    status: "active" | "inactive" | "suspended"
-}
 
-export const columns: ColumnDef<Student>[] = [
+export const columns: ColumnDef<StudentType>[] = [
     {
         id: "fullName",
         accessorFn: row => `${row.first_name} ${row.middle_name} ${row.last_name ? row.last_name : ""}`,
         header: ({column}) => {
             return <DataTableColumnHeader column={column} title="Full Name"/>
-
         },
         cell: ({row}) => (row.getValue('fullName') as string).toLowerCase().split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' '),
-        filterFn: "includesString"
+        filterFn: "includesString",
+        enableHiding: false
     },
     {
-        accessorFn: row => `${row.phone}`,
+        accessorFn: row => `${row.phone_number}`,
         header: "Phone Number",
     },
     {
@@ -40,29 +28,25 @@ export const columns: ColumnDef<Student>[] = [
     },
     {
         accessorKey: "status",
-        header: "Status",
+        header: ({column}) => {
+            return <DataTableColumnHeader column={column} title="Status"/>
+
+        },
         cell: ({row}) => {
             const status: string = row.getValue("status");
             return (
                 <div
                     className={cn(
                         `p-1 rounded-md text-xs w-max text-center`,
-                        status === "pending" && "bg-yellow-500/40",
-                        status === "success" && "bg-green-500/40",
-                        status === "failed" && "bg-red-500/40",
+                        status === "inactive" && "bg-yellow-500/40",
+                        status === "active" && "bg-green-500/40",
+                        status === "suspended" && "bg-red-500/40",
                     )}
                 >
                     {status}
                 </div>
             )
-        }
-    },
-    {
-        accessorKey: "date_of_birth",
-        header: ({column}) => {
-            return <DataTableColumnHeader column={column} title="Date"/>
-
-        }
+        },
     },
     {
         id: "actions",
