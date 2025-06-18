@@ -1,5 +1,5 @@
 import React from 'react';
-import {BadgeDollarSign, BookText, ChevronUp, Home, PackagePlus, PersonStandingIcon, User2,} from "lucide-react";
+import {BadgeDollarSign, BookText, Home, PackagePlus, PersonStandingIcon,File} from "lucide-react";
 import {
     Sidebar,
     SidebarContent,
@@ -9,14 +9,13 @@ import {
     SidebarGroupLabel,
     SidebarHeader,
     SidebarMenu,
-    // SidebarMenuBadge,
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarSeparator
 } from "@/components/ui/sidebar";
-import Link from "next/link";
 import Image from "next/image";
-import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
+import {UserMenuContent} from "@/features/dashboard/components/user-menu-content";
+import NavLink from '@/components/nav-link';
 
 const items = [
     {
@@ -28,6 +27,11 @@ const items = [
         title: "Students",
         url: "/dashboard/students",
         icon: PersonStandingIcon,
+    },
+     {
+        title: "Registers",
+        url: "/dashboard/register",
+        icon: File,
     },
     {
         title: "Payments",
@@ -74,10 +78,10 @@ export const AppSideBar = () => {
                                 items.map((item) => (
                                     <SidebarMenuItem key={item.title}>
                                         <SidebarMenuButton asChild>
-                                            <Link href={item.url}>
+                                            <NavLink active="bg-tertiary/80 dark:bg-primary/80 dark:text-black text-white" href={item.url}>
                                                 <item.icon/>
                                                 <span>{item.title}</span>
-                                            </Link>
+                                            </NavLink>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 ))
@@ -89,7 +93,6 @@ export const AppSideBar = () => {
                 <SidebarSeparator/>
 
 
-
             </SidebarContent>
 
 
@@ -97,18 +100,7 @@ export const AppSideBar = () => {
             <SidebarFooter>
                 <SidebarMenu>
                     <SidebarMenuItem>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <SidebarMenuButton>
-                                    <User2/>
-                                    John Doe
-                                    <ChevronUp className="ml-auto"/>
-                                </SidebarMenuButton>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent align="end">
-                                <DropdownMenuItem>Sign out</DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                        <UserMenuContent/>
                     </SidebarMenuItem>
                 </SidebarMenu>
             </SidebarFooter>

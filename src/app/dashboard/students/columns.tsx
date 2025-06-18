@@ -23,10 +23,6 @@ export const columns: ColumnDef<StudentType>[] = [
         header: "Phone Number",
     },
     {
-        accessorFn: row => `${row.account_number}`,
-        header: "Account Number",
-    },
-    {
         accessorKey: "status",
         header: ({column}) => {
             return <DataTableColumnHeader column={column} title="Status"/>

@@ -20,6 +20,9 @@ import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {exportTableToCSV} from "@/lib/export";
 import {Download} from "lucide-react";
+import {CalendarDatePicker} from "@/components/custome-component/calendar-date-picker";
+import {ReloadIcon} from "@/components/ui+/reload-icon";
+import {revalidateFetchData} from "@/lib/cache";
 
 
 type DataTableProps<TData, TValue> = {
@@ -28,9 +31,9 @@ type DataTableProps<TData, TValue> = {
 }
 
 export const PaymentDataTable = <TData, TValue>({
-                                             columns,
-                                             data,
-                                         }: DataTableProps<TData, TValue>) => {
+                                                    columns,
+                                                    data,
+                                                }: DataTableProps<TData, TValue>) => {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [rowSelection, setRowSelection] = React.useState({})
@@ -56,7 +59,7 @@ export const PaymentDataTable = <TData, TValue>({
     return (
         <div className="rounded-md border space-y-6">
             <div className="w-full flex justify-between px-4">
-                <div className="flex items-center py-4">
+                <div className="flex items-center gap-2 py-4">
                     <Input
                         placeholder="Search Students"
                         value={(table.getColumn("fullName")?.getFilterValue() as string) ?? ""}
@@ -65,6 +68,8 @@ export const PaymentDataTable = <TData, TValue>({
                         }
                         className="max-w-sm"
                     />
+                    <CalendarDatePicker query='payment_date'/>
+                    <ReloadIcon action={() => revalidateFetchData('payments')}/>
                 </div>
                 <div className="flex justify-between gap-2 mt-4">
                     <Button
@@ -78,7 +83,7 @@ export const PaymentDataTable = <TData, TValue>({
                             })
                         }
                     >
-                        <Download />
+                        <Download/>
                         Export
                     </Button>
                     <DataTableViewOptions table={table}/>
@@ -127,26 +132,7 @@ export const PaymentDataTable = <TData, TValue>({
                     )}
                 </TableBody>
             </Table>
-            {/*<div className="flex items-center justify-end space-x-2 py-4">*/}
-            {/*    <Button*/}
-            {/*        variant="outline"*/}
-            {/*        size="sm"*/}
-            {/*        onClick={() => table.previousPage()}*/}
-            {/*        disabled={!table.getCanPreviousPage()}*/}
-            {/*    >*/}
-            {/*        Previous*/}
-            {/*    </Button>*/}
-            {/*    <Button*/}
-            {/*        variant="outline"*/}
-            {/*        size="sm"*/}
-            {/*        onClick={() => table.nextPage()}*/}
-            {/*        disabled={!table.getCanNextPage()}*/}
-            {/*    >*/}
-            {/*        Next*/}
-            {/*    </Button>*/}
-            {/*</div>*/}
             <DataTablePagination table={table}/>
-
         </div>
     )
 }

@@ -1,6 +1,12 @@
 import React from 'react';
-import {Dialog, DialogContent, DialogDescription, DialogFooter, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
-import {Button} from 'react-day-picker';
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog";
 
 type GDialogType = {
     triggerChild: React.ReactNode;
@@ -16,10 +22,7 @@ const GDialog = ({triggerChild, heading,children,footer}: GDialogType) => {
     return (
         <Dialog>
             <DialogTrigger>
-                {/*<Button className="w-full">*/}
-                    {/*<Edit/> Edit Package*/}
                     {triggerChild}
-                {/*</Button>*/}
             </DialogTrigger>
             <DialogContent>
                 {

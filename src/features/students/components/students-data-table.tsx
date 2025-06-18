@@ -21,9 +21,12 @@ import {Button} from "@/components/ui/button";
 import {exportTableToCSV} from "@/lib/export";
 import {Download, Plus} from "lucide-react";
 import {ReloadIcon} from "@/components/ui+/reload-icon";
-import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
-import GDialog from "@/components/custome-component/g-dialog";
-import {AddOrEditStudentForm} from "@/features/students/components/add-or-edit-student-form";
+// import {DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger} from "@/components/ui/dropdown-menu";
+import {CalendarDatePicker} from "@/components/custome-component/calendar-date-picker";
+import {revalidateFetchData} from "@/lib/cache";
+import {Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
+import {ScrollArea} from "@/components/ui/scroll-area";
+import {AddOrEditStudentRegisterForm} from "@/features/register/components/add-or-edit-student-register-form";
 
 
 type DataTableProps<TData, TValue> = {
@@ -38,6 +41,7 @@ export const StudentsDataTable = <TData, TValue>({
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
     const [rowSelection, setRowSelection] = React.useState({})
+    const [open, setOpen] = React.useState(false)
 
     const table = useReactTable({
         data,
@@ -68,33 +72,27 @@ export const StudentsDataTable = <TData, TValue>({
                         }
                         className="max-w-sm"
                     />
-                    <DropdownMenu>
-                        <DropdownMenuTrigger>
-                            <Button variant="secondary">
-                                Search By
-                            </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            <DropdownMenuItem>Name</DropdownMenuItem>
-                            <DropdownMenuItem>Phone Number</DropdownMenuItem>
-                        </DropdownMenuContent>
-                    </DropdownMenu>
+                    <CalendarDatePicker query="register_date"/>
 
-                    <ReloadIcon/>
+                    <ReloadIcon action={() => revalidateFetchData('students')}/>
                 </div>
                 <div className="flex justify-between items-center gap-2">
-                    {/*<Button variant="outline" size="sm">*/}
-                    {/*    <Plus/>*/}
-                    {/*    Add Student*/}
-                    {/*</Button>*/}
-                    <GDialog triggerChild={
-                        <Button variant="outline" size="sm">
-                            <Plus/>
-                            Add Student
-                        </Button>
-                    }>
-                        <AddOrEditStudentForm form_type="add"/>
-                    </GDialog>
+                    <Sheet open={open} onOpenChange={setOpen}>
+                        <SheetTrigger asChild>
+                            <Button variant="outline" size="sm">
+                                <Plus/>
+                                Add Student
+                            </Button>
+                        </SheetTrigger>
+                        <SheetContent className="overflow-y-auto w-[800px]">
+                            <SheetHeader>
+                                <SheetTitle>Add Student Info</SheetTitle>
+                            </SheetHeader>
+                            <ScrollArea className="p-2 min-w-full h-[calc(100vh-100px)]">
+                                <AddOrEditStudentRegisterForm closeModalAction={setOpen} form_type="add"/>
+                            </ScrollArea>
+                        </SheetContent>
+                    </Sheet>
                     <Button
                         variant="outline"
                         size="sm"

@@ -10,21 +10,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {Button} from "@/components/ui/button";
 import {MoreVertical} from "lucide-react";
-import {useToast} from "@/hooks/use-toast";
+import {Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
+import {AddOrEditStudentRegisterForm} from "@/features/register/components/add-or-edit-student-register-form";
+import {ScrollArea} from "@/components/ui/scroll-area";
 import Link from 'next/link';
-import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
-} from "@/components/ui/dialog";
 import {StudentType} from '../schemas';
-import {AddOrEditStudentForm} from "@/features/students/components/add-or-edit-student-form";
 
 export const StudentTableActions = ({student}: { student: StudentType }) => {
+        const [open, setOpen] = React.useState(false)
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -36,36 +29,32 @@ export const StudentTableActions = ({student}: { student: StudentType }) => {
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel>Actions</DropdownMenuLabel>
                 <DropdownMenuSeparator/>
-                {/*NOT IMPLEMENTED YET*/}
                 <DropdownMenuItem>
                     <Link href={`/dashboard/students/${student.id}`}>
                         View student info
                     </Link>
                 </DropdownMenuItem>
-                <Dialog>
-                    <DialogTrigger asChild>
+                <Sheet open={open} onOpenChange={setOpen}>
+                    <SheetTrigger asChild>
                         <DropdownMenuItem onSelect={
                             event => event.preventDefault()
                         }>
                             Edit student info
                         </DropdownMenuItem>
-                    </DialogTrigger>
-                    <DialogContent className="max-w-2xl">
-                        <DialogHeader>
-                            <DialogTitle>Edit Student Info</DialogTitle>
-                            <DialogDescription>
+                    </SheetTrigger>
+                    <SheetContent className="overflow-y-auto">
+                        <SheetHeader>
+                            <SheetTitle>Edit Student Info</SheetTitle>
+                            <SheetDescription>
                                 Edit Student Information and Click on Edit Button.
-                                This Action can't be Undone
-                                {/*OPEN IN NEW TAB CLICK HERE BUTTON*/}
-
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div>
-                            {/*ADJUST THE WIDTH AND HEIGHT OF IFRAME*/}
-                            <AddOrEditStudentForm form_type="edit" defaultValues={student}/>
-                        </div>
-                    </DialogContent>
-                </Dialog>
+                                This Action can&apos;t be undone.
+                            </SheetDescription>
+                        </SheetHeader>
+                        <ScrollArea className="p-2 min-w-full h-[calc(100vh-100px)]">
+                            <AddOrEditStudentRegisterForm closeModalAction={setOpen} form_type="edit" defaultValues={student}/>
+                        </ScrollArea>
+                    </SheetContent>
+                </Sheet>
             </DropdownMenuContent>
         </DropdownMenu>
     );
