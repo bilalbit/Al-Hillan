@@ -10,7 +10,8 @@ import {ResetButton} from "./reset-button";
 import {DatePicker} from "./date-picker-field";
 import {NumberField} from "@/components/form-ui/number-field";
 import {DatePickerWithRange} from "@/components/form-ui/date-range-picker";
-import {DateField} from "@/components/form-ui/date-picker-with-dropdowns";
+import {HiddenInput} from "@/components/form-ui/hidden-input";
+import {TextAreaField} from "@/components/form-ui/text-area-field";
 
 // export useFieldContext for use in your custom components
 export const {fieldContext, formContext, useFieldContext, useFormContext } = createFormHookContexts()
@@ -18,13 +19,14 @@ export const {fieldContext, formContext, useFieldContext, useFormContext } = cre
 export const { useAppForm } = createFormHook({
     fieldComponents: {
         TextField,
+        TextAreaField,
         CheckboxField,
         SelectField,
         TextFieldWithLoader,
         DatePicker,
         NumberField,
         DatePickerWithRange,
-        DateField
+        HiddenInput
     },
     formComponents: {
         SubmitButton,

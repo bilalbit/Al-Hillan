@@ -1,3 +1,4 @@
+'use client';
 import React from 'react';
 import {
     Dialog, DialogClose,
@@ -9,17 +10,19 @@ import {
 } from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
 import {Trash2} from "lucide-react";
+import {deleteCourse} from "@/features/courses/server/actions";
 
 type DeleteDialogType = {
     name: string;
     label: string;
+    id: string
 }
 
-export const DeleteDialog = ({name,label}:DeleteDialogType) => {
+export const DeleteDialog = ({name,label,id}:DeleteDialogType) => {
     return (
         <Dialog>
-            <DialogTrigger>
-                <Button className='w-fit absolute top-2 right-2 hover:bg-destructive duration-200'>
+            <DialogTrigger asChild>
+                <Button className='w-fit absolute z-10 top-2 right-2 bg-red-700 hover:bg-destructive duration-200'>
                     <Trash2/>
                 </Button>
             </DialogTrigger>
@@ -38,7 +41,7 @@ export const DeleteDialog = ({name,label}:DeleteDialogType) => {
                         </Button>
                     </DialogClose>
                     <DialogClose asChild>
-                        <Button type="button" variant="destructive">
+                        <Button type="button" variant="destructive" onClick={()=>deleteCourse(id)}>
                             Delete
                         </Button>
                     </DialogClose>

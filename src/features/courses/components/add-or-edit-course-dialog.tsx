@@ -6,17 +6,14 @@ import {
     Dialog,
     DialogContent,
     DialogDescription,
-    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
 import {Edit, Plus} from "lucide-react";
 
-import {useAppForm} from "@/components/form-ui";
-import * as v from "valibot";
-
-import {CourseCategoryOptions, CourseSchema, CourseType} from "@/features/courses/schemas";
+import {courseDefaultValue, CourseType} from "@/features/courses/schemas";
+import {AddOrEditCoursesForm} from "@/features/courses/components/add-or-edit-courses-form";
 
 
 type AddOrEditCourseDialogType = {
@@ -25,32 +22,11 @@ type AddOrEditCourseDialogType = {
 }
 export const AddOrEditCourseDialog = ({
                                           form_type,
-                                          defaultValues = {
-                                              title: "",
-                                              category: "beginner",
-                                              youtube_url: "",
-                                              duration: undefined,
-                                              num_of_students: null,
-                                              startDate: undefined,
-                                              description: "",
-                                          }
+                                          defaultValues = courseDefaultValue
                                       }: AddOrEditCourseDialogType) => {
-    const form = useAppForm({
-        defaultValues: defaultValues,
-        validators: {
-            onChangeAsync: CourseSchema,
-            onBlurAsyncDebounceMs: 600,
-            onBlur: ({value}) => {
-                console.log(value)
-                console.log(v.parse(CourseSchema,value))
-            }
-        },
-        onSubmit: ({value}) => {
-            console.log(value)
-        }
-    })
+    const [open, setOpen] = React.useState(false)
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 {
                     form_type === "edit" ? (
@@ -77,57 +53,12 @@ export const AddOrEditCourseDialog = ({
                         }
                     </DialogDescription>
                 </DialogHeader>
-                <form className="flex flex-col gap-4">
-                    <form.AppField name="title">
-                        {(field) => <field.TextField label="Title"/>}
-                    </form.AppField>
-                    <form.AppField name='category'>
-                        {
-                            (field) => (
-                                <field.SelectField
-                                    label="Course type"
-                                    options={CourseCategoryOptions}
-                                    placeholder="Course Type"
-                                />
-                            )
-                        }
-                    </form.AppField>
-
-                    <form.AppField name="youtube_url">
-                        {(field) => <field.TextField label="Course Intro Video"/>}
-                    </form.AppField>
-                    <form.AppField name="startDate">
-                        {(field) => <field.DatePicker  label="Start day of The Course"/>}
-                    </form.AppField>
-                    <form.AppField name="duration">
-                        {(field) => <field.DatePicker  label="Duration of The Course"/>}
-                    </form.AppField>
-                    {/*<form.AppField name="duration">*/}
-                    {/*    {(field) => <field.DatePickerWithRange label="Duration of The Course"/>}*/}
-                    {/*</form.AppField>*/}
-                    <form.AppField name="description">
-                        {(field) => <field.TextField label="Description"/>}
-                    </form.AppField>
-                </form>
-                {
-                    form_type == "edit" ?
-                        (
-                            <form.AppForm>
-                                <form.SubmitButton>
-                                    <Button type="submit">Edit</Button>
-                                </form.SubmitButton>
-                            </form.AppForm>
-                        ) : (
-                            <form.AppForm>
-                                <form.SubmitButton>
-                                    <Button type="submit">Add</Button>
-                                </form.SubmitButton>
-                            </form.AppForm>
-                        )
-                }
-                <DialogFooter>
-                </DialogFooter>
+                <AddOrEditCoursesForm form_type={form_type} defaultValues={defaultValues} closeModal={setOpen}/>
             </DialogContent>
         </Dialog>
     );
 }
+
+
+
+

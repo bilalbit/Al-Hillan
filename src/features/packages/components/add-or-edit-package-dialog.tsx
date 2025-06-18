@@ -12,49 +12,23 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import {Edit, Plus} from "lucide-react";
+import {defaultPackageValue, PackagesType} from "@/features/packages/schemas";
+import {AddOrEditPackagesForm} from "@/features/packages/components/add-or-edit-packages-form";
 
-import {useAppForm} from "@/components/form-ui";
-import {PackageSchema, PackagesType} from "@/features/packages/schemas";
 
-// GET COURSE NAME FROM DATABASE
-const getCourseName = () => {
-    return [
-        {value: "0d854f16-bad4-46ff-a406-62ce89774910", label: "Course 1"},
-        {value: "0d854f16-bad4-46ff-a406-62ce89774920", label: "Course 2"},
-        {value: "0d854f16-bad4-46ff-a406-62ce89774930", label: "Course 3"},
-        {value: "0d854f16-bad4-46ff-a406-62ce89774940", label: "Course 4"},
-        {value: "0d854f16-bad4-46ff-a406-62ce89774950", label: "Course 5"},
-        {value: "0d854f16-bad4-46ff-a406-62ce89774960", label: "Course 6"}
-    ]
-}
 type AddPackageDialogType = {
     form_type: "add" | "edit"
     defaultValues?: PackagesType
 }
 export const AddOrEditPackageDialog = ({
                                            form_type,
-                                           defaultValues = {
-                                               id: "",
-                                               course_type: "",
-                                               year_price: 1,
-                                               half_year_price: 1,
-                                               month_price: 1,
-                                           }
+                                           defaultValues = defaultPackageValue
                                        }: AddPackageDialogType) => {
-    const form = useAppForm({
-        defaultValues: defaultValues,
-        validators: {
-            onChangeAsync: PackageSchema,
-            onBlurAsyncDebounceMs: 600
-        },
-        onSubmit: ({value}) => {
-            console.log(value)
-        }
-    })
+    const [open, setOpen] = React.useState(false)
+
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-                {/*<Button variant="outline">Add Package</Button>*/}
                 {
                     form_type === "edit" ? (
                         <Button className="w-full">
@@ -71,53 +45,18 @@ export const AddOrEditPackageDialog = ({
             </DialogTrigger>
             <DialogContent className="sm:max-w-[425px]">
                 <DialogHeader>
-                    <DialogTitle>{
-                        form_type === "add" ? "Add Package" : "Edit Package"
-                    }</DialogTitle>
+                    <DialogTitle>
+                        {
+                            form_type === "add" ? "Add Package" : "Edit Package"
+                        }
+                    </DialogTitle>
                     <DialogDescription>
                         {
                             form_type === "add" ? "Add New Packages. Click Add When You're Done" : "Edit Selected Package. Click On Edit When You're Done."
                         }
                     </DialogDescription>
                 </DialogHeader>
-                <form className="grid gap-4 py-4">
-                    <form.AppField name='course_type'>
-                        {
-                            (field) => (
-                                <field.SelectField
-                                    label="Course type"
-                                    options={getCourseName()}
-                                    placeholder="Course Type"
-                                />
-                            )
-                        }
-                    </form.AppField>
-                    <form.AppField name="year_price">
-                        {(field) => <field.NumberField type="number" min={1} label="Year Price"/>}
-                    </form.AppField>
-                    <form.AppField name="half_year_price">
-                        {(field) => <field.NumberField type="number" min={1} label="Half Year Price"/>}
-                    </form.AppField>
-                    <form.AppField name="month_price">
-                        {(field) => <field.NumberField type="number" min={1} label="Monthly Price"/>}
-                    </form.AppField>
-                </form>
-                {
-                    form_type == "edit" ?
-                        (
-                            <form.AppForm>
-                                <form.SubmitButton>
-                                    <Button type="submit">Edit</Button>
-                                </form.SubmitButton>
-                            </form.AppForm>
-                        ) : (
-                            <form.AppForm>
-                                <form.SubmitButton>
-                                    <Button type="submit">Add</Button>
-                                </form.SubmitButton>
-                            </form.AppForm>
-                        )
-                }
+                <AddOrEditPackagesForm closeModal={setOpen} form_type={form_type} defaultValues={defaultValues}/>
                 <DialogFooter>
                 </DialogFooter>
             </DialogContent>

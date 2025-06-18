@@ -4,31 +4,15 @@ import {ColumnDef} from "@tanstack/react-table"
 import {cn} from "@/lib/utils";
 import {DataTableColumnHeader} from "@/components/ui+/data-table-column-header";
 import {PaymentTableActions} from "@/features/payments/components/payment-table-actions";
+import {Payment} from "@/features/payments/schemas";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Payment = {
-    id: string
-    amount: number
-    status: "verified" | "un-verified"
-    payment_method: "telebirr" | "cbe"
-    transaction_id: string
-    package_id: string
-    date: string
-    student: {
-        id: string
-        first_name: string
-        middle_name: string
-        last_name?: string
-        phone: string
-        account_number: string
-    }
-}
 
 export const columns: ColumnDef<Payment>[] = [
     {
         id: "fullName",
-        accessorFn: row => `${row.student.first_name} ${row.student.middle_name} ${row.student.last_name ? row.student.last_name : ""}`,
+        accessorFn: row => `${row.first_name} ${row.middle_name} ${row.last_name ? row.last_name : ""}`,
         header: ({column}) => {
             return <DataTableColumnHeader column={column} title="Full Name"/>
 
@@ -37,11 +21,11 @@ export const columns: ColumnDef<Payment>[] = [
         filterFn: "includesString"
     },
     {
-        accessorFn: row => `${row.student.phone}`,
+        accessorFn: row => `${row.phone_number}`,
         header: "Phone Number",
     },
     {
-        accessorFn: row => `${row.student.account_number}`,
+        accessorFn: row => `${row.account_number}`,
         header: "Account Number",
     },
     {
@@ -49,7 +33,7 @@ export const columns: ColumnDef<Payment>[] = [
         header: "Payment Method"
     },
     {
-        accessorKey: 'transaction_id',
+        accessorKey: 'tin_number',
         header: "Transaction ID"
     },
     {
@@ -85,7 +69,7 @@ export const columns: ColumnDef<Payment>[] = [
         }
     },
     {
-        accessorKey: "date",
+        accessorKey: "payment_date",
         header: ({column}) => {
             return <DataTableColumnHeader column={column} title="Date"/>
 
@@ -97,7 +81,7 @@ export const columns: ColumnDef<Payment>[] = [
             const payment = row.original
 
             return (
-                <PaymentTableActions payment={payment} />
+                <PaymentTableActions payment={payment}/>
             );
         },
     },

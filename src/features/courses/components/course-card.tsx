@@ -8,20 +8,18 @@ import {CourseType} from "@/features/courses/schemas";
 import Image from "next/image";
 import {getImageUrl} from "@/lib/youtube";
 
-// startDate: "በየስድስት ወሩ ምዝገባ",
-// duration: "24 ሳምንታት",
-export const CourseCard = ({data}: { data: CourseType }) => {
+
+export const CourseCard = ({data}: { data: Omit<CourseType, "id"> & { id: string } }) => {
     const image_url = getImageUrl(data.youtube_url);
     return (
         <Card className="relative">
-            <DeleteDialog name="የተጅዊድ ህግጋት" label="Course"/>
+            <DeleteDialog name={data.title} label="course" id={data.id}/>
 
             <CardHeader>
                 <div className="relative">
                     <Button
                         variant="ghost"
-                        className="w-full h-48 p-0 overflow-hidden rounded-t-lg"
-                        // onClick={() => console.log(`View course ${course.id}`)} // Replace with your view logic
+                        className="w-full h-48 p-0 overflow-hidden rounded-sm"
                     >
                         <Image
                             src={image_url}
@@ -45,13 +43,13 @@ export const CourseCard = ({data}: { data: CourseType }) => {
                         <span className="font-bold">መደብ:</span> {data.category}
                     </p>
                     <p className="text-sm font-medium">
-                        <span className="font-bold">ቆይታ:</span> {data.duration?.toDateString()}
+                        <span className="font-bold">ቆይታ:</span> {data.duration?.toString()}
                     </p>
                     <p className="text-sm font-medium">
                         <span className="font-bold">ተማሪዎች:</span> {data.num_of_students}
                     </p>
                     <p className="text-sm font-medium">
-                        <span className="font-bold">መጀመሪያ ቀን:</span> {data.startDate?.toDateString()}
+                        <span className="font-bold">መጀመሪያ ቀን:</span> {data.startDate?.toString()}
                     </p>
                 </div>
             </CardContent>
