@@ -3,8 +3,7 @@
   "builds": [
     {
       "src": "api/app/main.py",
-      "use": "@vercel/python",
-      "config": { "maxLambdaSize": "15mb" }
+      "use": "@vercel/python"
     },
     {
       "src": "package.json",
@@ -23,19 +22,5 @@
   ],
   "env": {
     "APP_MODULE": "app.main:app"
-  },
-  "functions": {
-    "api/app/main.py": {
-      "memory": 1024,
-      "maxDuration": 10
-    }
-  },
-  "gitignore": [
-    ".env",
-    "api/.env",
-    ".venv/**",
-    "**/__pycache__/**",
-    "*.pyc",
-    "node_modules/**"
-  ]
+  }
 }
