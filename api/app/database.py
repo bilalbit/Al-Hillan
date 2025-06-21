@@ -18,7 +18,6 @@ from api.app.core.config import get_settings
 from api.app.modules import *
 
 
-# Retrieve database URL from settings (e.g., postgresql://user:password@localhost/db)
 settings = get_settings()
 database_url = settings.database_url
 
