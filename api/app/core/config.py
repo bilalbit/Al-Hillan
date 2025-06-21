@@ -7,7 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Compute the absolute path to .env (relative to project root)
 BASE_DIR = Path(__file__).resolve().parent.parent.parent  # app/core -> app -> project root
-ENV_FILE = BASE_DIR / ".env"
+ENV_FILE = BASE_DIR / "../.env"  #root of nextJs project
 
 
 class Settings(BaseSettings):
@@ -33,7 +33,8 @@ class Settings(BaseSettings):
         env_file=ENV_FILE,
         env_prefix="APP_",
         env_file_encoding="utf-8",
-        case_sensitive=False
+        case_sensitive=False,
+        extra="ignore"
     )
 
 
