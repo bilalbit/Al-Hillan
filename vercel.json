@@ -2,22 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "src/next.config.js",
+      "src": "src/app/**",
       "use": "@vercel/next"
-    },
-    {
-      "src": "src/pages/api/**",
-      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/api/(.*)",
-      "dest": "src/pages/api/$1"
-    },
-    {
       "src": "/(.*)",
-      "dest": "src/next.config.js"
+      "dest": "/"
     }
-  ]
+  ],
+  "framework": {
+    "slug": "nextjs",
+    "version": "15"
+  }
 }
