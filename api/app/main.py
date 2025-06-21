@@ -1,4 +1,4 @@
-# import uvicorn
+import uvicorn
 from fastapi import FastAPI
 
 from api.app.core.config import setting_dep
@@ -49,11 +49,11 @@ app.include_router(api_routes)
 # Include Auth from auth module and it should be separated from other api routes
 app.include_router(auth_router)
 
-# if __name__ == "__main__":
-#     """
-#     Run the application using Uvicorn for development.
-#
-#     Configures the server to run on localhost:8000 with auto-reload for development.
-#     For production, use Gunicorn with Uvicorn workers (e.g., `gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app`).
-#     """
-#     uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
+if __name__ == "__main__":
+    """
+    Run the application using Uvicorn for development.
+
+    Configures the server to run on localhost:8000 with auto-reload for development.
+    For production, use Gunicorn with Uvicorn workers (e.g., `gunicorn -w 4 -k uvicorn.workers.UvicornWorker main:app`).
+    """
+    uvicorn.run("main:app", host="127.0.0.1", port=8000, reload=True)
