@@ -1,5 +1,5 @@
 'use server';
-import {getFetch} from "@/lib/cache";
+import {Get} from "@/lib/cache";
 import {CourseType} from "@/features/courses/schemas";
 import {filterQueryType} from "@/lib/cache/types";
 
@@ -8,7 +8,7 @@ type getAllCoursesType = {
     data: (Omit<CourseType, "id"> & {id:string})[]
 }
 export const getCoursePackages = async (course_id:string ) => {
-    return await getFetch(`/public/packages/${course_id}`, {
+    return await Get(`/public/packages/${course_id}`, {
         tags: ["packages"],
         revalidate: false
     }) as {
@@ -24,13 +24,13 @@ export const getCourses = async (query?: filterQueryType) => {
     const offset = query?.page
         ? (Number(query.page) - 1) * Number(query.limit || defaultLimit)
         : 0;
-    return await getFetch(`/public/courses/?limit=${query?.limit || 3}&offset=${offset}&order_by=created_at&is_available=true`, {
+    return await Get(`/public/courses/?limit=${query?.limit || 3}&offset=${offset}&order_by=created_at&is_available=true`, {
         tags: ["courses"],
         revalidate: false
     }) as getAllCoursesType
 }
 export const getAllCourses = async () => {
-    return await getFetch(`/public/courses/?order_by=created_at&is_available=true`, {
+    return await Get(`/public/courses/?order_by=created_at&is_available=true`, {
         tags: ["courses"],
         revalidate: false
     }) as getAllCoursesType
@@ -43,13 +43,13 @@ type courseDropDownType = {
 }
 
 export const getCourseWithLabel = async () => {
-    return await getFetch(`/public/courses/package`, {
+    return await Get(`/public/courses/package`, {
         tags: ["courses"],
         revalidate: 20000
     }) as courseDropDownType[]
 }
 export const getCourseWithoutPackage = async () => {
-    return await getFetch(`/courses/`, {
+    return await Get(`/courses/`, {
         tags: ["courses"],
         revalidate: false
     }) as courseDropDownType[]
