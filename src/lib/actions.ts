@@ -17,9 +17,30 @@ export const POST = async <T>(
     const url = `${BASE_URL}${path}`;
 
     try {
+        const { access_token , refresh_token} = await getCredentialHeader();
+        const cookieHeaderParts: string[] = [];
+        if (access_token) {
+            cookieHeaderParts.push(`access_token=${encodeURIComponent(access_token)}`);
+        }
+        if (refresh_token) {
+            cookieHeaderParts.push(`refresh_token=${encodeURIComponent(refresh_token)}`);
+        }
+        const cookieHeader = cookieHeaderParts.join('; ');
+
+        // Log the constructed Cookie header for debugging
+        console.log('Cookie Header:', cookieHeader || 'Empty');
+
+        const headers: HeadersInit = {
+            'Content-Type': 'application/json',
+        };
+
+        // Add Cookie header if any tokens are present
+        if (cookieHeader) {
+            headers['Cookie'] = cookieHeader;
+        }
         const response = await fetch(url, {
             method: 'POST',
-            headers: {"Content-Type": "application/json"},
+            headers,
             body: JSON.stringify(data),
         });
 
@@ -51,13 +72,32 @@ export const postFetch = async <T>(
 ): Promise<T> => {
     const url = `${BASE_URL}${path}`;
     try {
+        const { access_token , refresh_token} = await getCredentialHeader();
+        const cookieHeaderParts: string[] = [];
+        if (access_token) {
+            cookieHeaderParts.push(`access_token=${encodeURIComponent(access_token)}`);
+        }
+        if (refresh_token) {
+            cookieHeaderParts.push(`refresh_token=${encodeURIComponent(refresh_token)}`);
+        }
+        const cookieHeader = cookieHeaderParts.join('; ');
+
+        // Log the constructed Cookie header for debugging
+        // console.log('Cookie Header:', cookieHeader || 'Empty');
+
+        const headers: HeadersInit = {
+            'Content-Type': 'application/json',
+        };
+
+        // Add Cookie header if any tokens are present
+        if (cookieHeader) {
+            headers['Cookie'] = cookieHeader;
+        }
+
         const response = await fetch(url, {
             method: 'POST',
             body: JSON.stringify(data),
-            headers: {
-                'Cookie': await getCredentialHeader(),
-                'Content-Type': 'application/json',
-            }
+            headers
         });
 
         if (!response.ok) {
@@ -82,13 +122,32 @@ export const putFetch = async <T>(
 ): Promise<T> => {
     const url = `${BASE_URL}${path}`;
     try {
+        const { access_token , refresh_token} = await getCredentialHeader();
+        const cookieHeaderParts: string[] = [];
+        if (access_token) {
+            cookieHeaderParts.push(`access_token=${encodeURIComponent(access_token)}`);
+        }
+        if (refresh_token) {
+            cookieHeaderParts.push(`refresh_token=${encodeURIComponent(refresh_token)}`);
+        }
+        const cookieHeader = cookieHeaderParts.join('; ');
+
+        // Log the constructed Cookie header for debugging
+        // console.log('Cookie Header:', cookieHeader || 'Empty');
+
+        const headers: HeadersInit = {
+            'Content-Type': 'application/json',
+        };
+
+        // Add Cookie header if any tokens are present
+        if (cookieHeader) {
+            headers['Cookie'] = cookieHeader;
+        }
+
         const response = await fetch(url, {
             method: 'PUT',
             body: JSON.stringify(data),
-            headers: {
-                'Cookie': await getCredentialHeader(),
-                'Content-Type': 'application/json',
-            }
+            headers
         });
 
         if (!response.ok) {
@@ -112,13 +171,31 @@ export const patchFetch = async <T>(
 ): Promise<T> => {
     const url = `${BASE_URL}${path}`;
     try {
+        const { access_token , refresh_token} = await getCredentialHeader();
+        const cookieHeaderParts: string[] = [];
+        if (access_token) {
+            cookieHeaderParts.push(`access_token=${encodeURIComponent(access_token)}`);
+        }
+        if (refresh_token) {
+            cookieHeaderParts.push(`refresh_token=${encodeURIComponent(refresh_token)}`);
+        }
+        const cookieHeader = cookieHeaderParts.join('; ');
+
+        // Log the constructed Cookie header for debugging
+        // console.log('Cookie Header:', cookieHeader || 'Empty');
+
+        const headers: HeadersInit = {
+            'Content-Type': 'application/json',
+        };
+
+        // Add Cookie header if any tokens are present
+        if (cookieHeader) {
+            headers['Cookie'] = cookieHeader;
+        }
         const response = await fetch(url, {
             method: 'PATCH',
             body: JSON.stringify(data),
-            headers: {
-                'Cookie': await getCredentialHeader(),
-                'Content-Type': 'application/json',
-            }
+            headers
         });
 
         if (!response.ok) {
@@ -141,11 +218,31 @@ export const deleteFetch = async <T>(
 ): Promise<T> => {
     const url = `${BASE_URL}${path}`;
     try {
+        const { access_token , refresh_token} = await getCredentialHeader();
+        const cookieHeaderParts: string[] = [];
+        if (access_token) {
+            cookieHeaderParts.push(`access_token=${encodeURIComponent(access_token)}`);
+        }
+        if (refresh_token) {
+            cookieHeaderParts.push(`refresh_token=${encodeURIComponent(refresh_token)}`);
+        }
+        const cookieHeader = cookieHeaderParts.join('; ');
+
+        // Log the constructed Cookie header for debugging
+        // console.log('Cookie Header:', cookieHeader || 'Empty');
+
+        const headers: HeadersInit = {
+            'Content-Type': 'application/json',
+        };
+
+        // Add Cookie header if any tokens are present
+        if (cookieHeader) {
+            headers['Cookie'] = cookieHeader;
+        }
+
         const response = await fetch(url, {
             method: 'DELETE',
-            headers: {
-                'Cookie': await getCredentialHeader(),
-            }
+            headers
         });
 
         if (!response.ok) {
@@ -194,12 +291,27 @@ export const authFetch = async () => {
 
 export const getUserInfo = async () => {
     try {
+        const { access_token , refresh_token} = await getCredentialHeader();
+        const cookieHeaderParts: string[] = [];
+        if (access_token) {
+            cookieHeaderParts.push(`access_token=${encodeURIComponent(access_token)}`);
+        }
+        if (refresh_token) {
+            cookieHeaderParts.push(`refresh_token=${encodeURIComponent(refresh_token)}`);
+        }
+        const cookieHeader = cookieHeaderParts.join('; ');
+
+        const headers: HeadersInit = {
+            'Content-Type': 'application/json',
+        };
+
+        // Add Cookie header if any tokens are present
+        if (cookieHeader) {
+            headers['Cookie'] = cookieHeader;
+        }
         const response = await fetch(`${BASE_URL}/users`, {
             method: 'GET',
-            headers: {
-                'Cookie': await getCredentialHeader(),
-                'Content-Type': 'application/json',
-            },
+            headers,
             cache: 'force-cache',
             next: {
                 tags: ["users"]

@@ -39,7 +39,6 @@ export const getAllCourses = async () => {
 type courseDropDownType = {
     label: string
     value: string
-    // package_id: string
 }
 
 export const getCourseWithLabel = async () => {

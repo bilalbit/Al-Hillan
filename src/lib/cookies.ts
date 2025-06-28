@@ -1,5 +1,5 @@
 'use server';
-import {cookies, headers} from 'next/headers';
+import {cookies} from 'next/headers';
 import type {NextRequest} from 'next/server';
 
 // Interface for a parsed cookie object
@@ -71,7 +71,13 @@ export const clearSession = async () => {
 };
 
 export const getCredentialHeader = async () => {
-    return (await headers()).get('cookie') || '';
+    const cookieStore = await cookies();
+    const access_token = cookieStore.get('access_token')?.value
+    const refresh_token = cookieStore.get('refresh_token')?.value
+    return {
+        access_token,
+        refresh_token
+    }
 };
 
 export const getCookiesHeader = async (request: NextRequest) => {

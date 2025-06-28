@@ -135,7 +135,7 @@ def db_get_student_registrations_by_month(session: Session):
     # Query to count registrations per month
     statement = (
         select(
-            func.strftime(Register.registration_date, 'Month').label('month'),
+            func.to_char(Register.registration_date, 'Month').label('month'),
             func.count().label('total_student')
         )
         .where(Register.registration_date >= six_months_ago)
